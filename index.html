@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vektor Visualizer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">vektor<span>.</span>viz</div>
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="btn3d" onclick="setMode('3d')">3D</button>
+    <button class="mode-btn" id="btn2d" onclick="setMode('2d')">2D</button>
+  </div>
+</header>
+
+<div class="main">
+  <div class="sidebar">
+
+    <!-- Dynamic vector list -->
+    <div id="vector-list"></div>
+
+    <!-- Add vector button -->
+    <div class="add-vector-section">
+      <button class="btn add-btn" onclick="addVector()">+ Vektor hinzufügen</button>
+    </div>
+
+    <!-- Ansicht -->
+    <div class="section">
+      <div class="section-title">Ansicht</div>
+
+      <div class="grid-size-row">
+        <label>Koordinatensystem-Größe</label>
+        <input type="number" id="grid-size" value="6" min="2" max="20" step="1" oninput="draw()">
+      </div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="show-components" checked onchange="draw()">
+        <label for="show-components">Koordinatenkomponenten</label>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="show-grid" checked onchange="draw()">
+        <label for="show-grid">Raster</label>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="auto-rotate" onchange="toggleRotate()">
+        <label for="auto-rotate">Auto-Rotation (nur 3D)</label>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="resetView()">Reset Kamera</button>
+        <button class="btn primary" onclick="resetAll()">Reset alles</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="canvas-wrap">
+    <canvas id="main"></canvas>
+    <div class="canvas-hint" id="hint">Ziehen zum Drehen · Scroll zum Zoomen</div>
+    <div class="info-badge" id="info-badge"></div>
+  </div>
+</div>
+
+<script src="vektor.js"></script>
+</body>
+</html>
