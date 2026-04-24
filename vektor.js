@@ -6,7 +6,7 @@ const canvas = document.getElementById('main');
 const ctx = canvas.getContext('2d');
 
 let mode = '3d';
-let rotX = 0.6, rotY = -0.75;
+let rotX = 13.15, rotY = -3.75;
 let autoRot = false;
 let zoom = 72;
 let dragging = false, lastMX = 0, lastMY = 0;
@@ -458,7 +458,7 @@ function updateBadge() {
 
 // ---- VIEW ----
 function toggleRotate() { autoRot = document.getElementById('auto-rotate').checked; }
-function resetView() { rotX = 0.6; rotY = -0.75; zoom = 72; pan2X = 0; pan2Y = 0; draw(); }
+function resetView() { rotX = 13.15; rotY = -3.75; zoom = 72; pan2X = 0; pan2Y = 0; draw(); }
 function resetAll() {
   vectors = [];
   nextId = 1;
@@ -763,9 +763,25 @@ window.addEventListener('mousemove', e => {
   if (!dragging) return;
   const dx = e.clientX - lastMX;
   const dy = e.clientY - lastMY;
-  if (mode === '3d') { rotY += dx * 0.008; rotX += dy * 0.008; }
-  else               { pan2X += dx;        pan2Y += dy; }
-  lastMX = e.clientX; lastMY = e.clientY;
+
+  if (mode === '3d') {
+    // Invertierte Steuerung: Vorzeichen getauscht
+    rotY -= dx * 0.008;
+    rotX += dy * 0.008;
+
+    // Aktualisierung der Anzeige rechts oben
+    const debugDiv = document.getElementById('debug-coords');
+    if (debugDiv) {
+      debugDiv.textContent = `rotX: ${rotX.toFixed(2)}, rotY: ${rotY.toFixed(2)}`;
+    }
+  }
+  else {
+    pan2X += dx;
+    pan2Y += dy;
+  }
+
+  lastMX = e.clientX;
+  lastMY = e.clientY;
   draw();
 });
 window.addEventListener('mouseup', () => dragging = false);
@@ -784,9 +800,19 @@ canvas.addEventListener('touchmove', e => {
   if (!dragging) return;
   const dx = e.touches[0].clientX - lastMX;
   const dy = e.touches[0].clientY - lastMY;
-  if (mode === '3d') { rotY += dx * 0.01; rotX += dy * 0.01; }
-  else               { pan2X += dx;       pan2Y += dy; }
-  lastMX = e.touches[0].clientX; lastMY = e.touches[0].clientY;
+
+  if (mode === '3d') {
+    // Invertierte Steuerung: Vorzeichen getauscht
+    rotY -= dx * 0.01;
+    rotX -= dy * 0.01;
+  }
+  else {
+    pan2X += dx;
+    pan2Y += dy;
+  }
+
+  lastMX = e.touches[0].clientX;
+  lastMY = e.touches[0].clientY;
   draw();
 }, { passive: true });
 canvas.addEventListener('touchend', () => dragging = false);
